@@ -36,7 +36,7 @@ The script provides the following features, which can be controlled through comm
             --apply-mutation (applies base transformations like capitalization).
             --apply-leet (applies leetspeak transformations).
             --apply-chars (appends characters like numbers and symbols).
-    Search through the extracted words:
+    Search for a location by specific words:
         Purpose: Allows users to search for keywords.
         Usage: --search "admin" (without specifying the length or quantity)
     Output File (--output / -o):
