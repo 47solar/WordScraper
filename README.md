@@ -5,7 +5,7 @@
 This script is designed to scrape words from a given webpage and its internal links, analyze them, and generate potential password mutations based on configurable options. The user can customize the depth of the crawl, the types of mutations to apply to words, and filter words based on their length. The script outputs the results in a convenient format, with options to save the output to a file. Additionally, it includes a progress bar for a better user experience, especially when processing large numbers of words or pages.
 User-Accessible Functionality:
 
-The script provides the following features, which can be controlled through command-line options:
+The script provides the following features, which can be controlled through options:
 
     URL Input (--url / -u):
         Purpose: The user provides the URL of a webpage to scrape words from.
@@ -43,10 +43,7 @@ The script provides the following features, which can be controlled through comm
         Purpose: Allows the user to save the results of the script to a file for further use.
         Usage: --output result.txt (saves the results in a file named result.txt)
 
-    Progress Bar:
-        Purpose: To provide feedback on the script’s progress as it scrapes pages and processes words. A progress bar will be shown while crawling through internal links and processing the words for mutations.
-
-Example Command:
+Example Commands:
 
     python WordScraper.py --url https://example.com --depth 2 --length 5 --count 10 --apply-mutation --apply-leet --apply-chars --output result.txt
     python WordScraper.py -u https://example.com -d 4 -s "password"
