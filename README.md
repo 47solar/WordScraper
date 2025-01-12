@@ -48,6 +48,8 @@ Example Commands:
     python WordScraper.py --url https://example.com --depth 2 --length 5 --count 10 --apply-mutation --apply-leet --apply-chars --output result.txt
     python WordScraper.py -u https://example.com -d 4 -s "password"
 
+![изображение](https://github.com/user-attachments/assets/1c22d1c4-f212-4bc4-8a5b-db52dd6eeff9)
+
 What the Script Does:
 
 * Scrapes words from the given URL and all internal links up to the specified crawl depth.
