@@ -46,7 +46,7 @@ The script provides the following features, which can be controlled through comm
 
 Example Command:
 
-    python script.py --url https://example.com --depth 2 --length 5 --count 10 --apply-mutation --apply-leet --apply-chars --output result.txt
+    python WordScraper.py --url https://example.com --depth 2 --length 5 --count 10 --apply-mutation --apply-leet --apply-chars --output result.txt
 
 What the Script Does:
 
