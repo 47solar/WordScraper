@@ -37,8 +37,8 @@ The script provides the following features, which can be controlled through comm
             --apply-leet (applies leetspeak transformations).
             --apply-chars (appends characters like numbers and symbols).
     Search through the extracted words:
-        Purpose: Option allows users to pass multiple words to search for.
-        Usage: --search "admin" "password" (without specifying the length or quantity)
+        Purpose: Allows users to search for keywords.
+        Usage: --search "admin" (without specifying the length or quantity)
     Output File (--output / -o):
         Purpose: Allows the user to save the results of the script to a file for further use.
         Usage: --output result.txt (saves the results in a file named result.txt)
