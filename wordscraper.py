@@ -67,7 +67,7 @@ def get_internal_links(html, base_url):
             links.add(url)
     return links
 
-def crawl(url, depth, visited):
+def crawl(url, depth, visited, word_locations):
     if depth == 0 or url in visited:
         return set()
     visited.add(url)
@@ -77,10 +77,16 @@ def crawl(url, depth, visited):
         return set()
 
     words = set(get_all_words_from(html))
+
+    for word in words:
+        if word not in word_locations:
+            word_locations[word] = set()
+        word_locations[word].add(url)
+
     internal_links = get_internal_links(html, url)
 
     for link in tqdm(internal_links, desc="Crawling links", leave=False):
-        words.update(crawl(link, depth - 1, visited))
+        words.update(crawl(link, depth - 1, visited, word_locations))
 
     return words
 
@@ -91,7 +97,7 @@ def password_mutation(word, apply_mutation=False, apply_leet=False, apply_chars=
     mutation.add(word.capitalize())
     mutation.add(word.upper())
 
-    if apply_mutation:  
+    if apply_mutation:
         if apply_leet:
             leet_mutations = leet_transformations(word, apply_leet)
             mutation.update(leet_mutations)
@@ -105,6 +111,19 @@ def password_mutation(word, apply_mutation=False, apply_leet=False, apply_chars=
 
     return list(mutation)
 
+def search_words(word_locations, target_words):
+    found = {word: urls for word, urls in word_locations.items() if word in target_words}
+    not_found = set(target_words) - set(found.keys())
+
+    if found:
+        print("\nFound words and their locations:")
+        for word, urls in found.items():
+            print(f"- {word}:")
+            for url in urls:
+                print(f"  * {url}")
+    else:
+        print("No matching words were found.")
+
 @click.command()
 @click.option('--url', '-u', prompt='Enter Web URL', help='URL of webpage to extract from.')
 @click.option('--length', '-l', default=0, help='Minimum word length to count.')
@@ -115,19 +134,25 @@ def password_mutation(word, apply_mutation=False, apply_leet=False, apply_chars=
 @click.option('--apply-mutation', '-am', is_flag=True, help="Apply base password mutation.")
 @click.option('--apply-leet', '-al', is_flag=True, help="Apply leetspeak mutation.")
 @click.option('--apply-chars', '-ac', is_flag=True, help="Apply character-based mutation (numbers, symbols).")
-def main(url, depth, length, fixed_length, count, output, apply_mutation, apply_leet, apply_chars):
+@click.option('--search', '-s', multiple=True, help='Search for specific words.')
+def main(url, depth, length, fixed_length, count, output, apply_mutation, apply_leet, apply_chars, search):
     if length > 0 and fixed_length:
         print('Error: --length and --fixed-length are mutually exclusive.')
         return
 
     visited = set()
-    words = crawl(url, depth, visited)
+    word_locations = {}
+    words = crawl(url, depth, visited, word_locations)
+
+    if search:
+        search_words(word_locations, search)
+        return
 
     unique_words = set(words)
 
     if fixed_length:
         unique_words = {word for word in unique_words if len(word) == fixed_length}
-    
+
     elif length > 0:
         unique_words = {word for word in unique_words if len(word) >= length}
 
@@ -142,12 +167,12 @@ def main(url, depth, length, fixed_length, count, output, apply_mutation, apply_
     result = []
     for word in top_words:
         result.append(word)
-        if apply_mutation:  
+        if apply_mutation:
             mutations = password_mutation(
-                word, 
-                apply_mutation=apply_mutation,  
-                apply_leet=apply_leet,                   
-                apply_chars=apply_chars         
+                word,
+                apply_mutation=apply_mutation,
+                apply_leet=apply_leet,
+                apply_chars=apply_chars
             )
             result.extend(mutations)
 
